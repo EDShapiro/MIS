@@ -1,0 +1,147 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{gensymb}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{mhchem}
+\usepackage[margin=1.25in]{geometry}
+\linespread{2.0}
+\graphicspath{ {c:/Users/EvanD/OneDrive/Pictures/}}
+\title{ MIS Thesis Outline}
+\begin{document}
+\maketitle
+\noindent
+
+\section{Introduction}
+%We are interested in extending work done on the study of plasma size scaling of turbulent heat transport in future nuclear fusion devices.
+%Why?
+Nuclear fusion of deuterium and tritium is the process during which two light elements fuse together, forming an $\alpha$ particle, releasing a neutron, and releasing kinetic energy. This release of kinetic is due to the decrease of potential energy in the nucleus as nucleons move closer to each other, thereby increasing the energy binding the nucleus together. The increase of kinetic energy during a fusion event is what motivates nuclear fusion research, as, at large enough scales, this process yields enough energy to be leveraged to power a steam turbine to produce electricity, potentially providing a clean, safe source of energy. Progress has been made in creating nuclear fusion reactors that can sustain a fusion plasma, one of the major issues of particular interest in this project is extending work that has been on understanding plasma size scaling of turbulent heat transport in future nuclear fusion devices. [1]\\
+\newpage
+We are interested in nuclear fusion events that balance the likelihood of occurence and energy ouput after fusion. Considering these two factors, the reaction of primary interest in fusion research is the deuterium-tritium fusion reaction:  
+\begin{align*}
+\ce{^2_1H + ^3_1H ->	^4_2He + ^1_0n}, 
+\end{align*}	
+where $\ce{^2_1H}$ is deuterium (D), $\ce{3_1H}$ is tritium (T),  $\ce{^4_2He}$ is an $\alpha$ particle, and $\ce{^1_0n}$ is a neutron.
+Taking into account the binding energy of each element, the mass of the system before and after this nuclear fusion event is given by:
+\begin{align*}
+\ce{(2 - 0.000994)m_p +(3 - 0.006284) m_p -> (4 - 0.0427404)m_p + (1 + 0.001378)m_p}
+\end{align*}
+where $m_p=1.6726*10^{-27}kg$ is the proton mass. The difference in mass before and after the reaction is thus $\delta_m = -0.01875m_p$.\\
+Using Einstein's famous equation $\mathcal{E} = mc^2$, where $c$ is the speed of light, we find that energy-mass conversion to be
+\begin{align*}
+\mathcal{E} = \delta_m *c^2 = 0.01875*1.6726*10^{-27}kg c^2 = 17.9 MeV,
+\end{align*}
+where the mass has been converted to kinetic energy.
+A further calculation shows that $1/5th$ of this energy is distributed to the $\alpha$ particle, and the other $4/5$th is distributed to the neutron. In a fusion reactor these two particles serve two important, and different, functions. When the number of fusion events is scaled to a large enough level, the resulting number of high energy neutrons can be leveraged to power a steam turbine, which through the inductive process, produces electricity. The high kinetic energy of the $\alpha$ particles are used to increase the the kinetic energy of supplied D-T fuel, reducing the energy required for continuous external heating. creating a self-sustaining fusion process. \\
+Since both deuterium and tritium have a net positive charge there is a repelling Coulomb force between them that prevents fusion from occuring in low temperature environments. Additionally in low temperature environments the cross sectional area of the D-T mixture is too low to make fusion an energy positive process. To overcome the Coulomb barrier, and increase the effective cross-section, the deuterium and tritium must be supplied enough kinetic energy to surpass the potential energy barrier to get within a particular radial distance from each other. "A positive energy balance is possible if the fuel particles can be made to interact to lose their energy. To achieve this the particles must retain their energy and remain in the reacting region for a sufficient time." This leads to a necessary confinement time of a sufficient number of particles within a particular region, or number density $n$, to create the conditions necessary for sustained fusion. The confinement time, $\tau_E$, is the primary parameter of interest in this project, as we are studying diffusive processes that degrade the experimental confinement time below the confinement time necessary for sustained fusion.\\
+ In equillibrium, the kinetic energy of the D-T fuel mixture in a fusion reaction follows a Maxwellian distribution, and the high energy particles in the upper tail of the distribution are the source of the fusion reactions. The necessary average temperature to achieve desired fusion rates in this tail is 10keV, or around 100 million degrees centigrade. [1] The high temperature environment leads to complete ionization of the D-T mixture, yielding an equal number of electrons $n_e$ and ions $n_i$. The net equality of charge leads to an electrically neutral system in equillibrium, which is highly responsive to external electric and magnetic fields; a gas in this state is referred to as a plasma.\\
+We would like to keep all of the fusion particles confined inside of the reactor, however the high energy and temperature of the plasma particles preclude using the physical wall of the reactor for confinement.[1] There are two important factors that must be considered when designinng a device to confine a fusion plasma: the plasma state of the plasma the fact that we want to prevent the high energy particles of the plasma from colliding with the material walls of the device. Through the Lorentz force, the ions and electrons of the plasma can be confined with strong magnetic fields interior to the fusion device. A tokamak reactor is a toroidal nuclear fusion device that generates helical magnetic fields that provide a confining path for the ions and electrons of the plasma. The path traversed by the ions and electrons prior to reaching a material wall is a million times the length of the reactor.\\
+\newline
+Power Balance\\
+For a fusion reactor to be viable from both an energy and economic persepective it must meet power balance condition: $P_{out} >> P_{in}$, where $P_{out}$ is the power retrieved from the high energy neutrons, and $P_{in}$ is the power necessary to sustain these fusion process while the reactor is in operation. [2] If the power necessary to sustain the fusion process is of the same order as the power recovered from the high energy neutrons, then our process will not be worth the investment. Thus, understanding the input power $P_{in}$ required to sustain nuclear fusion in a working scale tokamak reactor is of critical importance.\\
+Predicting $P_in$ requires that we account for all of  power sources and powers sinks in a fusion plasma.   In addition to the external heating power supplied to initiate and sustain nuclear fusion, the alpha particles produced during fusion are a heating source as well, as via Coulomb collisions the alpha particles transmit kinetic energy to incoming D-T fuel.
+
+To motivate the driving question being investigated in this thesis, consider an exposed heat bath being used to maintain a solution in a beaker at a particular temperature in order to accelerate a chemical reaction ( or personal bath that is being used to soak and relax in). (Possible diagrem here?). Our understanding of heat exchange tells us that the temperature difference, or thermal gradient, between the bath and the beaker will drive heat to travel from an area of high temperature to an area of low temperature, which in this case is the beaker soaking in the bath and the air directly above the bath. This transfer of hear raises the temperature of these heat sinks and lowers the temperature of the water. To maintain the temperature of the bath, the water will be kept in or on top of vessel that can act as a heat source, i.e. a hot plate, so that heat will continuously be added to the bath to compensate for heat loss. Ideally the the heat lost in this manner will not be so much as to require too much, or any external heating, especially. Calculating the rate at which heat leaves the system requires an understanding of how  heat diffuses across the thermal gradient. In this example, heat transport is well understood - collisions between high energy/temperature water molecule and molecules in the beaker cause energy/momentum to be transferred from the water to the beaker and air. This energy transfer through collisions leads to an increase in temperature in the beaker, and eventually the solution it contains, the air above the heat bath, and reducing the temperature of the water.\\
+( These calculations might be a bit too extreme for a personal bath, but would make sense in a lab where maintaining precise temperatures are necessary.\\)
+ This is an illustration of the principle of power balance - You have a system that has a required operating temperature. To maintain that temperature you must determine all of the ways that heat can be lost by accounting for all of the heat sinks, and the rates at which heat will be lost to the heat sinks through various heat transport mechanisms. This allows for the calculation of the rate at which heat must be added to system in order to counterbalance the heat being lost, and maintain the operating temperature of the system.\\
+For a fusion plasma, balancing the heat loss is a tricky proposition. If enough heat is lost due to various heat transport mechanisms, using auxiliary heat
+The operating temperature of a fusion plasma is given by:
+
+Maintaining this operating temperature requires complete understanding of the rate at which heat is lost from the plasma. While the sinks are easily identifiable it turns out that, due to the fact that a plasma is a high temperature ionized gas subjected to an external magnetic field, understanding and describing the mechanisms that drive heat diffusion and convection to these sinks is quite complicated, and projecting the rate at which these mechanisms drive heat loss to the heat sinks at future reactors scales is still an unsolved problem. The work presented in this thesis is an attempt to contribute to the work already being done on this problem. Using advanced fusion plasma models, simulation code, and high-performance computing resources we are interested in extending work that has been done to predict the rate at which heat is transported out of an ITER scale plasma through classical, neo-classical, and turbulence driven diffusion.\\
+Due to the uncertainty in the heat deposition profile in the fusion plasma, as well as uncertainty due to discretization, and other paramaters in the heating model, we are interested in developing uncertainty bounds, or a probability distribution function, for the rate of rate diffusion out of plasma. This requires an understanding of which parameters are most strongly correlated with heat diffusion.\\
+Developing bounds on the uncertainty of in the heat diffusion parameter requires multiple runs of the above mentioned high-performance simulation code, which, due to computational expense, is currently an unfeasbile proposition even with . Since computational resources are limited, we are interested in using existing data, or a limited number of full-fidelity simulations to develop a model surrogate for the full heating model, which will allow us to perform uncertainty quantification with an approximate model in a compurationally feasible manner.
+
+
+In order to accurately predict power balance we must devise accurate models for where heat can be lost, or the power sinks, while a reactor is operating. in the reactorto In an ideal nuclear fusion reactor nothing is wasted: all of the kinetic energy of the high energy neutron is captured and either converted into electrical energy, or it is used in the tritium production process. Since alpha particles are charged, their momentum is transferred to incoming dueterium and tritium atoms via the Coulomb force, providing enough kinetic energy to cause them to fuse
+
+and is primary fusion event of interest since it releases the most kinetic energy of all fusion events.  Nuclear fusion of this type is more energetically favorable than all commonly used energy producing processes, including nuclear fission and combustion of hydrocarbons [1] (Friedberg).
+The energetic favorability of deuterium-tritium fusion has driven research in the field of nuclear fusion, with the goal of building a reactor that can start and sustain nuclear fusion in a manner that is overall energy positive.
+ Additionally, there are less safety concerns about nuclear compared to nuclear fission reactors, since no enriched material has to be storedand the environmen(Environmental sustainability note here?) 
+Predicting plasma size scalintransport in a fusion reactor is necessary for 
+
+We are interested in performing a simulation  experiment that will provide uncertainty bounds on the rate at which energy, in the form of high energy ions, travels from the central region of tokamak fusion plasma towards the containing walls of the reactor.
+For the sake of staying consistent with the literature on fusion research we will refer to this flow of energy as heat or thermal transport, as the macroscopic temperature of a particular species of gas can be defined in terms of the of average kinetic energy of the species of gas, or:
+$$
+E_{av} = \frac{n}{2}KT
+$$
+Where $E_{av}$ is the average kinetic energy of the gas species, $n$ are the degrees of freedom of the gas species, $K$ is  Boltzmann's constant, and $T$ is the temperature of the gas.\\
+\subsection{Fusion Plasmas}
+The fusion event we interested in is Deuterium-Tritium fusion, during which the nucleus of a deuterium atom, $D$ or $\ce{^{2}H}$ , and the nucleus of a tritium atom, T or $\ce{^{3}H}$, fuse together during the following nuclear reaction:
+\begin{align*}
+D + T \to \ce{^{4}He} + n + 17.6 MeV.
+\end{align*}
+The last term in this formula - $17.6 $ MeV- tells us that fusing the nucleus of a deuterium atom and a tritium atom converts $17.6 $ MeV of nuclear binding energy into kinetic-energy. In fact, the amount of energy generated per D-T fusion event rivals the energy per nuclear fission event, and just about every other energy producing process being leveraged at the moments.
+
+Developing an entire theory of plasma transport is beyond the scope of this document. We will do a brief review of plasma transport scaling from an experimental and simulation perspective. Discuss the fact that, due to computational expense, no uncertainty quantification has been performed up until this point on the simulations.\\
+
+Here we discuss the baseline simulation, and the parameters that we are interested in propogating uncertainty through.\\
+Here we will discuss surrogate models to overcome computational brute force expense of 
+
+\section{XGC}
+Previous research in ion temperature gradient driven turbulence transport scaling hasTo perform the simulation of interest we use a full-f 5-D gyorxinetic simulation code. WE are able to reduce from 6-D to 5-D by averaging over the the saft time scale of the gyrkinetic motion $\delta f$ simulations. 
+Full-f simulations evolve the entire ion and electron distribution function, rather than fixing a background distribution and evolving a perturbed distribution according to the physical model, or a $\delta f$ simulation. The reason we use such an approach is thatin the edge region of the plasma that we are interested in simulating the perturbation amplitude reaches $\delta f / f_0  \mathcal{O}(1)$
+
+leading to a p
+
+Confinement
+Tokamaks
+
+To motivate the driving question being investigated in this thesis, consider an exposed heat bath being used to maintain a solution in a beaker at a particular temperature in order to accelerate a chemical reaction ( or personal bath that is being used to soak and relax in). (Possible diagrem here?). Our understanding of heat exchange tells us that the temperature difference, or thermal gradient, between the bath and the beaker will drive heat to travel from an area of high temperature to an area of low temperature, which in this case is the beaker soaking in the bath and the air directly above the bath. This transfer of hear raises the temperature of these heat sinks and lowers the temperature of the water. To maintain the temperature of the bath, the water will be kept in or on top of vessel that can act as a heat source, i.e. a hot plate, so that heat will continuously be added to the bath to compensate for heat loss. Ideally the flow of hot water in would perfectly match the flow of heat out of the bath, so that the temperature of the bath stays constant. Calculating the rate at which heat leaves the system requires an understanding of how  heat diffuses across the thermal gradient. In this example, heat transport is well understood - collisions between high energy/temperature water molecule and molecules in the beaker cause energy/momentum to be transferred from the water to the beaker and air. This energy transfer through collisions leads to an increase in temperature in the beaker, and eventually the solution it contains, the air above the heat bath, and reducing the temperature of the water.\\
+( These calculations might be a bit too extreme for a personal bath, but would make sense in a lab where maintaining precise temperatures are necessary.\\)
+ This is an illustration of the principle of power balance - You have a system that has a required operating temperature. To maintain that temperature you must determine all of the ways that heat can be lost by accounting for all of the heat sinks, and the rates at which heat will be lost to the heat sinks through various heat transport mechanisms. This allows for the calculation of the rate at which heat must be added to system in order to counterbalance the heat being lost, and maintain the operating temperature of the system.\\
+For a fusion plasma, balancing the heat loss is a tricky proposition. If enough heat is lost due to various heat transport mechanisms, using auxiliary heat
+The operating temperature of a fusion plasma is given by:
+
+Maintaining this operating temperature requires complete understanding of the rate at which heat is lost from the plasma. While the sinks are easily identifiable it turns out that, due to the fact that a plasma is a high temperature ionized gas subjected to an external magnetic field, understanding and describing the mechanisms that drive heat diffusion and convection to these sinks is quite complicated, and projecting the rate at which these mechanisms drive heat loss to the heat sinks at future reactors scales is still an unsolved problem. The work presented in this thesis is an attempt to contribute to the work already being done on this problem. Using advanced fusion plasma models, simulation code, and high-performance computing resources we are interested in extending work that has been done to predict the rate at which heat is transported out of an ITER scale plasma through classical, neo-classical, and turbulence driven diffusion.\\
+Due to the uncertainty in the heat deposition profile in the fusion plasma, as well as uncertainty due to discretization, and other paramaters in the heating model, we are interested in developing uncertainty bounds, or a probability distribution function, for the rate of rate diffusion out of plasma. This requires an understanding of which parameters are most strongly correlated with heat diffusion.\\
+Developing bounds on the uncertainty of in the heat diffusion parameter requires multiple runs of the above mentioned high-performance simulation code, which, due to computational expense, is currently an unfeasbile proposition even with . Since computational resources are limited, we are interested in using existing data, or a limited number of full-fidelity simulations to develop a model surrogate for the full heating model, which will allow us to perform uncertainty quantification with an approximate model in a compurationally feasible manner.
+
+
+\subsection{Magnetically Confined Fusion}
+\subsubsection{Nuclear Fusion Introduction}
+Importance of fusion as an energy source.\\
+Physical description of nuclear fusion and how it relates to a plasma.
+\subsubsection{Important Plasma Definitions}
+Debye Shielding\\
+Plasma Frequency\\
+Group Behavior\\
+\subsubsection{Development of physics relevant to simulation and work}
+\textbf{General Behavior of Charged Particles in an Electric and Magnetic Fields.
+Drift phenomenon.}
+Magnetic Confinement Principles.
+Traveling waves in a plasma.
+Kinetic Theory
+Heating Model.
+Heat transport - Classical, Neoclassical, and Turbulent Transport.
+$\rho*$ scaling.
+
+Methodology used to understand and predict heat transport at ITER scales:
+Experimentation and simulation to develop scaling laws of dimensionally similar systems.
+\subsection{Plasma Simulation Description - XGC Code}
+Importance of simulations, what they allow us to understand and predict on. \\
+Computational expense of modern plasma simulations.
+\subsection{UQ as a way to build a PDF on QOI from a plasma simulation}
+Full description of sources of uncertainty in simulation - I.E. uncertainty of input parameters, variables\\
+Description of propagation of error through a forward non-linear map. Give basic example here using the nonlinear Landau damping UQ example.\\
+\subsection{Surrogate Modeling}
+What is a surrogate model? How can surrogate models be helpful when performing  Hi-Fi plasma simulations. Examples. 
+How do we develop a surrogate model? Be very clear here.
+\section{Literature Review}
+Complete this weekend - stop hemming and hawing as Mike would say
+Summarize Idomura Paper 
+\subsection{Landau Damping - Derivation and Physical Meaning?}
+\subsection{Neoclassical Theory, Scaling Laws, and Diffusion - Still Relevant? A lot of reading and work was done on this. Perhaps substitute for Landau Damping, or use Landau Damping as a test case for UQ to illustrate what we intend to do.}
+ \subsection{Gyrokinetic Equations - Still relevant?}
+\subsection{ XGC code \& Heating Model}
+ - Still relevant? Code is installed on Theodon.
+ \subsection{Surrogate models in UQ}
+\section{UQ test case - Landau damping both linear and non-linear regimes. Experimental methodology}
+\section{3}
+Simulation-"Experimental Methodology"
+\section{Results}
+\subsection{$\rho*$ Scaling}
+\subsection{Sensitivity to deposition profile}
+\section{Conclusions}
+\end{document}

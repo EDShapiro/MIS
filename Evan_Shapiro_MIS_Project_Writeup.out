@@ -1,0 +1,27 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Fusion Plasmas}{section.1}% 2
+\BOOKMARK [1][-]{section.2}{Prediction under uncertainty for Fusion Plasmas}{}% 3
+\BOOKMARK [2][-]{subsection.2.1}{Forward UQ Problem: Uncertainty Propagtaion}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.2}{Predicting \(under uncertainty\) future reactor performance}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.3}{Low Fidelity Models vs High Fidelity\(Gyrokinetic\) Models and UQ}{section.2}% 6
+\BOOKMARK [1][-]{section.3}{XGC}{}% 7
+\BOOKMARK [2][-]{subsection.3.1}{Magnetically Confined Fusion}{section.3}% 8
+\BOOKMARK [3][-]{subsubsection.3.1.1}{Nuclear Fusion Introduction}{subsection.3.1}% 9
+\BOOKMARK [3][-]{subsubsection.3.1.2}{Important Plasma Definitions}{subsection.3.1}% 10
+\BOOKMARK [3][-]{subsubsection.3.1.3}{Development of physics relevant to simulation and work}{subsection.3.1}% 11
+\BOOKMARK [2][-]{subsection.3.2}{Plasma Simulation Description - XGC Code}{section.3}% 12
+\BOOKMARK [2][-]{subsection.3.3}{UQ as a way to build a PDF on QOI from a plasma simulation}{section.3}% 13
+\BOOKMARK [2][-]{subsection.3.4}{Surrogate Modeling}{section.3}% 14
+\BOOKMARK [1][-]{section.4}{Literature Review}{}% 15
+\BOOKMARK [2][-]{subsection.4.1}{Neoclassical Theory, Scaling Laws, and Diffusion - Still Relevant? A lot of reading and work was done on this. Perhaps substitute for Landau Damping, or use Landau Damping as a test case for UQ to illustrate what we intend to do.}{section.4}% 16
+\BOOKMARK [2][-]{subsection.4.2}{Gyrokinetic Equations - Still relevant?}{section.4}% 17
+\BOOKMARK [2][-]{subsection.4.3}{ XGC code \046 Heating Model}{section.4}% 18
+\BOOKMARK [2][-]{subsection.4.4}{Surrogate models in UQ}{section.4}% 19
+\BOOKMARK [1][-]{section.5}{UQ test case - Landau damping both linear and non-linear regimes. Experimental methodology}{}% 20
+\BOOKMARK [1][-]{section.6}{Simulation: "Experimental Methodology"}{}% 21
+\BOOKMARK [2][-]{subsection.6.1}{Postprocessing Data}{section.6}% 22
+\BOOKMARK [1][-]{section.7}{Results}{}% 23
+\BOOKMARK [2][-]{subsection.7.1}{* Scaling}{section.7}% 24
+\BOOKMARK [2][-]{subsection.7.2}{Variance of * with uncertain heating model parameters}{section.7}% 25
+\BOOKMARK [2][-]{subsection.7.3}{Transport Sensitivity to heating/cooling deposition profile}{section.7}% 26
+\BOOKMARK [1][-]{section.8}{Conclusions}{}% 27

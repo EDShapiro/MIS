@@ -1,0 +1,555 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{gensymb}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{mhchem}
+\usepackage[margin=1in]{geometry}
+\linespread{1.0}
+\graphicspath{ {c:/Users/EvanD/OneDrive/Pictures/}}
+\title{ MIS Thesis Outline}
+\begin{document}
+\maketitle
+\noindent
+\section{Introduction}
+%We are interested in extending work done on the study of plasma size scaling of turbulent heat transport in future nuclear fusion devices.
+%Why? 
+The history of nuclear fusion research dates to the 1920's, when Arthur Eddington suggested in his book "The Internal Constitution of Stars" that the transmutation of hydrogen atoms through nuclear fusion into helium is responsible for powering the energy released by the sun.\cite{Eddington}. Eddington's hypothesis motivated experimental research with the goal of ceating the conditions necessary for nuclear fusion.
+In 1934, Ernest Rutherford and his assistant Mark Oliphant successfully fused 2 deuterium atoms in the following reaction:
+\begin{align*}
+\ce{^2_1H + ^2_1H ->	^3_2He + ^1_0n + 3.74 MeV}, 
+\end{align*}
+where the $3.74$ MeV has been converted from nuclear binding energy to kinetic energy,making it an energetically favorable nuclear reaction.\cite{Oliphant_Rutherford}. % their article, "Transmutation Effects Observed with Heavy Hydrogen",\\
+Nuclear fusion of deuterium and tritium is more energetically favorable than D-D fusion, and releases more kinetic energy per nucleon than that of nuclear fission. The D-T fusion chain is a safer energy source than fission, since the fuel is radioactively stable and cannot be weaponized. It is also a environmentally safe or clean energy source relative to fossil fuels. The energetic favorability and current climate, both political and literal, explain why nuclear fusion is, and has been active area of energy research, with the goal of developing a working fusion reactor that can provide safe and clean electricity.\\
+
+\vspace{0.01cm}
+
+While it nice to be idealistic about the amount of energy that nuclear fusion can provide, designing and engineering a device that can create the conditions necessary to sustain nuclear fusion in a net energy positive manner has been a major technical challenge. To make fusion energetically viable the pressure and temperature inside of the plasma must provide enough power to sustain nuclear fusion to some degree, offsetting external heating requirements. Thus it is important to understand the physical mechanisms that can degrade the plasma power inside reactors at operational scale. Through the use of dimensionless parameters, almost all of the conditions that will exist in future operational reactors can be determined using current experimental reactors, allowing for accurate predictions with respect to these parameters. However, in current experimental reactors the dimensionless plasma size, $\rho*$, cannot be matched to future operational reactors.  This lack of empirical reference at operational scales has led to the development of physical models that produce the underlying physics causing ion temperature gradient driven transport. 5-D Gyrokinetic models have been developed that characterize ion and electron kinetic behavior and collisions in a tokamak environment well enough to predict the transport phenomenon at the scale we are interested in. With the aid of modern computer gyrokinetic simulations, XGC1, and modern parallel computing power at NERSC, we can accurately solve the 5-D equations. \\
+
+\vspace{0.01cm}
+
+Ion temperature gradient driven heat transport scaling has been shown, under certain conditions, both experimentally and via simulations, to occur in a linear fashion (Bohm-like) with plasma size and power. If true, this will require linear scaling of auxiliary heating with plasma size and power, and is thus important to fully understand transport levels. While experimental and numerical work has been done to predict transport scaling, little to no work has been de the uncertainty developing statistic on the outputs from the simulations. Experimentally derived ion and electron density and temperature profiles are used as inputs for the gyorkinetic simulations. These profile fits and associated uncertainty bounds are derived using mathematically rigorous fitting methods, i.e. Gaussian process regression, from data produced by the Alcator C-Mod III fusion reactor.CITATIONS HERE\\
+
+\vspace{0.01cm}
+
+To make accurate predictions with these profiles it is necessary to consider the uncertainty bounds, as transport has been shown to be sensitive to variations in the density and temperature profiles. In this project we seek to understand how the uncertainty bounds effect ion heat transport in a tokamak fusion reactor. The amount of time it takes to perform a simulation take brute force sampling methods like Monte Carlo sampling out of consideration for characterizing the transport bounds. To overcome this, we seek to construct a model surrogate to the gyrokinetic model. The intended model surrogate is a sparse grid polynomial interpolant, which will allow us to use far fewer points sampled from the ion temeperature profile parameter space than Monte Carlo sampling would. This model surrogate will allow us to calculate moments of the ion phase space distribution function to calculate the quantity of interest, the expected heat flux at a particular radial distance in the reactor, and other moments of the distribution function.  \\
+\newpage
+\section{Background}
+To understand why nuclear fusion is such an energy rich reaction we must first develop a physical model for the reaction. Nuclear fusion occurs when the nuclei of two elements combine due to the nuclear force exerted force, producing a heavier element, converting potenital energy into kinetic energy, and potentially releasing subatomic particle. The nuclear fusion reaction that is of primary interest in fusion energy research is the deuterium($\ce{^2_1H}$)-tritium$\ce{^2_1H}$ reaction have enough energy to overcome the Coulomb repulsion force, and get close enough together so that their nucleii fuse together. This results ini the formation of an $\alpha$ particle, the release of a neutron, and the conversion of nuclear potential energy to kinetic energy. This release of kinetic is due to the decrease of potential energy in the nucleus as nucleons move closer to each other, thereby increasing the energy binding the nucleus together. The increase of kinetic energy during a fusion event is what motivates nuclear fusion research, as, at large enough scales, this process yields enough energy to be leveraged to power a steam turbine to produce electricity, potentially providing a clean, safe source of energy. Progress has been made in creating nuclear fusion reactors that can sustain a fusion plasma, one of the major issues of particular interest in this project is extending work that has been on understanding plasma size scaling of turbulent heat transport in future nuclear fusion devices. [1]\\
+\subsection{Nuclear Fusion as an Energy Producing Event}
+We are interested in nuclear fusion events that maximize likelihood of occurence and energy ouput after fusion. Considering these two factors, the reaction of primary interest in fusion research is the deuterium-tritium fusion reaction:  
+\begin{align*}
+\ce{^2_1H + ^3_1H ->	^4_2He + ^1_0n}, 
+\end{align*}	
+where $\ce{^2_1H}$ is deuterium (D), $\ce{3_1H}$ is tritium (T),  $\ce{^4_2He}$ is an $\alpha$ particle, and $\ce{^1_0n}$ is a neutron.
+Taking into account the binding energy of each element, the mass of the system before and after this nuclear fusion event is given by:
+\begin{align*}
+\ce{(2 - 0.000994)m_p +(3 - 0.006284) m_p -> (4 - 0.0427404)m_p + (1 + 0.001378)m_p}
+\end{align*}
+where $m_p=1.6726*10^{-27}kg$ is the proton mass. The difference in mass before and after the reaction is thus $\delta_m = -0.01875m_p$.\\
+Using Einstein's famous equation $\mathcal{E} = mc^2$, where $c$ is the speed of light, we find that energy-mass conversion to be
+\begin{align*}
+\mathcal{E} = \delta_m *c^2 = 0.01875*1.6726*10^{-27}kg c^2 = 17.9 MeV,
+\end{align*}
+where the mass has been converted to kinetic energy.
+A further calculation shows that $1/5th$ of this energy is distributed to the $\alpha$ particle, and the other $4/5$th is distributed to the neutron. In a fusion reactor these two particles serve two important, and different, functions. When the number of fusion events is scaled to a large enough level, the resulting number of high energy neutrons can be leveraged to power a steam turbine, which through the inductive process, produces electricity. The high kinetic energy of the $\alpha$ particles are used to increase the the kinetic energy of supplied D-T fuel, reducing the energy required for continuous external heating. creating a self-sustaining fusion process. \\
+Since both deuterium and tritium have a net positive charge there is a repelling Coulomb force between them that prevents fusion from occuring in low temperature environments. Additionally in low temperature environments the cross sectional area of the D-T mixture is too low to make fusion an energy positive process. To overcome the Coulomb barrier, and increase the effective cross-section, the deuterium and tritium must be supplied enough kinetic energy to surpass the potential energy barrier to get within a particular radial distance from each other. "A positive energy balance is possible if the fuel particles can be made to interact to lose their energy. To achieve this the particles must retain their energy and remain in the reacting region for a sufficient time." This leads to a necessary confinement time of a sufficient number of particles within a particular region, or number density $n$, to create the conditions necessary for sustained fusion. The confinement time, $\tau_E$, is the primary parameter of interest in this project, as we are studying diffusive processes that degrade the experimental confinement time below the confinement time necessary for sustained fusion.\\
+ In equillibrium, the kinetic energy of the D-T fuel mixture in a fusion reaction follows a Maxwellian distribution, and the high energy particles in the upper tail of the distribution are the source of the fusion reactions. The necessary average temperature to achieve desired fusion rates in this tail is 10keV, or around 100 million degrees centigrade. [1] The high temperature environment leads to complete ionization of the D-T mixture, yielding an equal number of electrons $n_e$ and ions $n_i$. The net equality of charge leads to an electrically neutral system in equillibrium, which is highly responsive to external electric and magnetic fields; a gas in this state is referred to as a plasma.\\
+We would like to keep all of the fusion particles confined inside of the reactor, however the high energy and temperature of the plasma particles preclude using the physical wall of the reactor for confinement.[1] There are two important factors that must be considered when designinng a device to confine a fusion plasma: the plasma state of the plasma the fact that we want to prevent the high energy particles of the plasma from colliding with the material walls of the device. Through the Lorentz force, the ions and electrons of the plasma can be confined with strong magnetic fields interior to the fusion device. A tokamak reactor is a toroidal nuclear fusion device that generates helical magnetic fields that provide a confining path for the ions and electrons of the plasma. The path traversed by the ions and electrons prior to reaching a material wall is a million times the length of the reactor.\\
+\newline
+
+
+
+
+\section{Power Balance}
+For a fusion reactor to be viable from both an energy and economic persepective it must meet power balance condition: $P_{out} >> P_{in}$, where $P_{out}$ is the power retrieved from the high energy neutrons, and $P_{in}$ is the power necessary to sustain these fusion process while the reactor is in operation. [2] If the power necessary to sustain the fusion process is of the same order as the power recovered from the high energy neutrons, then our process will not be a worthy investment. Thus, understanding the input power $P_{in}$ required to sustain nuclear fusion in a working scale tokamak reactor is of critical importance. Predicting $P_{in}$ requires that we account for all of internal fusion plasma power sources, $P_{source}$, and powers sinks, $P_{sink}$, which we will do next. Once a full accounting of the sources and sinks is completed, the conditions necessary for a self-sustained fusion reaction can be determined. \\
+Basically, consider a heat bath
+The primary internal fusion power source are the $\alpha$-particles that are created during the fusion reaction. The magnetic fields generated by the fusion reactor confines the positively charged $\alpha$-particles. Under confinement, these $\alpha$-particles transmit the 3.5MeV they obtained during the fusion reaction to incoming D-T fuel, imparting enough kinetic energy for D-T fusion to occur. Taking into account $\alpha$-particle velocity, cross-sectional area as a function of velocity $\sigma(v)$, total ion density $n$, and energy per $\alpha$-particle, $E_{\alpha}$, the $\alpha$-particles heating or power per unit volume is
+\begin{align*}
+p_{\alpha} = \frac{1}{4} n^2 <\sigma v> E_{\alpha},
+\end{align*}
+with $<\sigma v>$ being the fusion reaction rate assuming a Maxwellian distribution function. 
+Integrating over the entire volume yields the total $\alpha$-particle power in the plasma.
+\begin{align*}
+P_\alpha &= \int_V \frac{1}{4} n^2 <\sigma v> E_{\alpha} d^3x\\
+	     &=  \frac{1}{4}\overline{n^2<\sigma v>}E_{\alpha}V.
+\end{align*}
+ with $V$ being the volume of the reactor.\\
+Now we account for power losses in the plasma. Due to temperature gradients and Coulomb collisions, in a tokamak reactor power is continuously leaving the plasma as ions and electrons move from the plasma to the reactor material walls. This lost power should ideally be completely replaced by $\alpha$-particle heating, and if it is not then external heating must be used to replace the lost power. "The average energy of plasma particles at a temperature $T$ is $\frac{3}{2} T$..." [1]. The electrons and ions have the same temperaturee and quantitity, so if we let the ion number density per unit volume be $n$, the kinetic energy density of the  system is $3nT$. Integrating over the entire volume yields the following total plasma energy 
+\begin{align*}
+W &= \int_{V}3nTd^3x\\
+    &=3\overline{nT}V.
+\end{align*}
+We define the characteristic time $\tau_E$ to be the amount of time that heating power, once generated, stays in the plasma. This parameter is very important in nuclear fusion, as it has a minimum threshold that guarantees ignition, or self-sustaining fusion in a fusion reactor.\\ The amount of heating power that leaves is given by 
+\begin{align*}
+P_H = \frac{W}{\tau_E}.
+\end{align*}
+The yields the following power balance equation
+\begin{align*}
+P_H + P_{\alpha} &= P_L\\
+P_H + \frac{1}{4}\overline{n^2 <\sigma v>}E_{\alpha} V,
+\end{align*}
+where $P_H$ is the applied heating power.\\
+We now want to consider the power in a fusion reactor after fusion has been initiated, and determine the conditions necessary for self sustaining fusion. For self sustained fusion,  there must be enough $\alpha$-particle heating power to sustain the fusion process, and negate the need for external heating. Thus, in the power balance equation, this means letting $P_H =0$ and rearranging the power balance equation to arrive at the following inequality
+\begin{align*}
+n\tau_E > \frac{12}{<\sigma v>}\frac{T}{E_\alpha}. 
+\end{align*}
+Considering an operating temperature range of 10-20 $keV$, $<\sigma v> = 1.1 \times 10^{-24} T^2 m^3 s^{-1}$, we arrive at the following condition for a self-sustaining plasma
+\begin{align*}
+nT \tau_E > 5 \times 10^{21} m^{-3} keV s
+\end{align*} 
+in which the density and temperature profile inside the plasma are parabolic, and $n,T$ are the peak values of the profile. Given an operating temperature of $10$ keV, and a number density of $10^20 m^{-3}$ yields a time constant of $\tau_E =5$ s, or the required energy confinement time in a tokamak reactor is about 5 s. This implies that, if all the power lost from the system is to be balanced by $\alpha$ particle heating, that the characteristic time scale of heat transport should be on the order of 5 seconds. Thus, we need to fully understand all of the physical transport mechanisms inside of the fusion reactor that degrade these conditions, and \\
+Confining energy in the plasma for a time $\tau_E$ means that conditions must exist in the reactor that constrain heat from flowing at a rate faster than that dictated by the ignition time. This is one of the major problems being adressed in current nuclear fusion physics: predicting the rate at which heat leaves a fusion plasma via ions and electrons under operational conditions in an ITER scale reactors.
+
+12/5/2019 2:24 PM
+Ion temperature gradient driven turbulent transport has been shown to scale in Bohm-lik manner is full-f simulations
+We describe how ion temperature gradients cause turbulent transport via low frequency drift modes, and develop the mathematical model that accurately describes plasma transport at the particle level.
+
+
+
+
+\section{Important Tokamak Fusion Plasma Definitions \& Behavior}
+To understand the mechanisms driving heat transport out of a tokamak reactor we must establish the general characteristics of a plasma, and how plasma particles react as they experience the various forces and pressures that exist in the plasma. This section is intended to establish the basics of plasma behavior in a tokamak setting.
+
+
+
+\subsection{Tokamak Definition \& Coordinate System}
+
+
+While there are a few types of experimental nuclear fusions reactors, i.e. stellarators and tokamaks, working fusion reactors are all predicted to be tokamaks. Tokamak is the Russian abbreviation "toroidal'naya kamera s magnitnymi katushkami", which translates to toroidal chamber with magnetic coils. Tokamaks were developed in Russia in the 1950s \cite{Wesson}, and adopted as the standard model for nuclear fusion reactors. This is because, with the appropriate confining magnetic field configuration, tokamaks allows for continuous motion of the plasma in the toroidal direction, increasing the plasma confinement time. The appropriate magnetic field configuration, as seen below, is a combination of a toroidal magnetic field, $B_{\phi}$, and a poloidal magnetic field, $B_p$, resulting in a helical magnetic field. The toroidal magnetic field is generated by coils that surround the tokamak in the poloidal direction, while the the poloidal magnetic fields are induced by a plasma current that flows in the toroidal direction as a result of a transformer at the center of the toroid. Ideally, without instabilities in the plasma, the strength of the helical magnetic fields provides enough force to balance out the plasma pressure, $p$, which is a product of the particle density and temperature. The magnetic field strength at ITER scale reactors will be on the order of 13 Teslas \cite{ITER}. 
+
+
+Nuclear fusion and heating occurs at the core of the fusion plasma resulting in the high temperatures described in the introduction. At the edge of the plasma, close to the reactor walls, the density falls as particles either recombine or are diverted and falls at the edge of the reactor as the ion and electron density Steep ion temperature gradient between the core of the reactor and the edge are necessary. Transport is driven by Coulomb collisions, temperature gradients,  and  electromagnetic field interactions and fluctuations that perturb the plasma particle velocities away from a Maxwellian distribution function. Thus we need a kinetic theory that predicts the the evolution of the phase space coordinates of the perturbed plasma particles in time. Since coliision frequency is depedent on relative velocities, this theory involves considering all of the local forces acting on all particle velocities in the phase space, which leads to the evolution of the particle distribution function using the Vlasov-Boltzmann equation. The Fokker-Planck collision operator is also considered to account for different species collisions, as well as the transformation of the Vlasoz equation to time averaged gyrokinetic coordinates, since this time averaging reduces the Vlasov system from 6 dimensions to 5 dimensions.
+
+\subsection{Energy-Temperature Relatedness}
+
+
+In equillibrium, a plasma particle species $j$ with mass $m_j$, has a  Maxwellian distribution function
+\begin{align*}
+f(\textbf{v}) = Aexp(-\frac{1}{2}m_j \textbf{v}^2/K_BT_j). 
+\end{align*}
+Taking the second moment, we get that the average kinetic energy has the following relation to temperature:
+\begin{align*}
+E_{av} = \frac{3}{2} K_BT
+\end{align*}
+
+where $K_B=1.38*10^{-23}J/^{\circ}K$ is Boltzmann's constant. The fact that temperature and average kinetic energy are so closely related means that in plasma literature temperature is given in terms of energy, so in the case of $10$ eV plasma, $KT =10eV$.\\
+\subsection{Nuclear}
+To produce a large enough tritium and deuterium cross sectional area to yield the D-T fusion reaction rate that generates an appropriate amount of fusion power, the average kinetic energy of the individual D-T particles must be around 10 $kev$ \cite{Wesson}. This will yield enough particles with the necessary energy, $70$ keV, \cite{Chen} at the tail end of the Maxwellian distribution.  
+A kinetic energy energy of 10 $keV$ corresponds to D-T temperatures on the order of $100^{\circ}$ Celcius, which means that the D-T fuel and $\alpha$ particles are completely ionized, and meet the conditions necessary to be considered a plasma.
+Plasmas have a few important characteristics that define their behavior, that we discuss here. Plasma exhibit collective behavior due to the fact that they are charged and produce long range electric fields that can interact with distant parts of the plasma. Additionally, motion of the plasma particles produces an electrical current, which in turn generates magnetic fields, which can influence the behavior of distant plasma particles.   \cite{Chen}.
+
+
+\subsection{Debye Shielding \& Length}
+In a tokamak plasma, the density of the ions and electrons is on the order of $10^{20}$m$^{-3}$,  which means that only small separations of charge occur due to the strong electric forces generated from the separation. Consider now a sheet of electrons of width d, separated from a sheet of electrons of width d, and a number density of electrons and ions of $n$. Separation of ions from electrons by a distance d exerts a force per unit area$F$ such that 
+
+$$F \sim \frac{(dne)^2}{\epsilon_0},$$
+
+which means in a tokamak that
+\begin{align*}
+F \sim 10^{13} d^2 N m^{-2}.
+\end{align*} 
+For a sheet of width $1mm$ this yields a force per unit area of $10^7Nm^{-2}$. This strong electric force density leads the electron and ion densities being almost equivalent everywhere in the plasma, or they are held in a quasi-neutral state.\\
+The Debye length is the fundamental length of a plasma, and it is characterized as the length or thickness "for which the internal energy of the plasma can provide the energy for a complete separation of the ions and electrons." \cite{Wesson} It is also defined in terms of an positively charged spherical surface, with surface area A. When introduced into the plasma, electrons will move to cover the surface in order to block out the electric field, the width of the sheet of electrons shielding the large ion will be on the order of the Debye length. The Debye length is given by
+\begin{align*}
+\lambda_D &= (\frac{\epsilon_0T}{ne^2})^{1/2}\\
+		&=2.35\times10^5(\frac{T}{n})^{\frac{1}{2}})m
+\end{align*}
+with the units of T in $keV$. We can see from this formula that the Debye length increases with temperature and kinetic energy, and decreases with density. The Debye length is important when considering short range collisions between plasma particles.\\
+Solving Poisson's equation for the electrical potential in the radial distance away from an ion shielded in a plasma yields
+\begin{align*}
+\phi(r) = \frac{e}{4\pi \epsilon r}exp(-\sqrt{2}r/\lambda_d).
+\end{align*}
+Using this information, we can imagine that, in a quasi-neutral plasma in an equillibrium state, to shield out the electric fields, the plasma electrons surround the plasma ions in a sphere, with a shielding width that is the length of the Debye radius. We refer to this sphere as a Debye sphere. When an electric field with a wavelength $\lambda$ much greater than the Debye length, or $\lambda_D << \lambda$, is introduced into a region of the plasmas, the charged particles in the Debye sphere will oscillate collectively at the frequency, $\omega$, of the electric field. 
+\begin{align*}
+\end{align*}
+\subsection{Plasma Frequency}
+
+ Due to the completely ionized state, plasmas are good conductors, so electrons respond immediately to cancel out any local or externally produced electric field. This allows us to define the characteristic frequency of a plasma. Consider an electrically neutral region of a plasma -  if electrons in a plasma in the region are displaced, due to an electromagnetic field or thermal effects, this will cause a charge separation from the ions. This charge separation generates an electric field, that exerts a restoring force on the electrons, and works to move the electrons back to cancel out the electric field. The momentum of the electrons will move them past their original position, "allowing them to recreate their charge separation" \cite{Wesson}. This cycle repeats itself, yielding a plasma oscillation that oscillates at the characteristic electron plasma frequency $\omega_p = (\frac{ne^2}{\epsilon_0 m_e})^{1/2}$. The ion oscillation frequency is similarly defined to be $\omega_{pi} =  (\frac{ne_i^2}{\epsilon_0 m_i})^{1/2}$. \\
+
+
+\subsection{Larmor Orbits}
+
+In a magnetic field \textbf{B}, particles  with charge $e_j$, where $j$ denotes the species of charged particle, a mass $m_j$, moving with a velocity \textbf{v}in a region of the field obey the following equation of motion:
+\begin{align*}
+m_j\frac{d \textbf{f}}{dt} = e_j \textbf{v}\times \textbf{B}.
+\end{align*}
+Since we are only concerned with the direction of motion of the charged particle with respect to the magnetic field, we decompose the particles velocity into components that are perpendicular and parallel to the magnetic field:
+\begin{align*}
+\textbf{v} = \textbf{v}_{\perp} + \textbf{v}_{||}
+\end{align*}  
+If the velocity has a component that is perpendicular to the magnetic field, \textbf{v}$_{\perp}$, then the charged particle will undergo rotational motion around the field line with frequency $\omega_{cj} = \frac{e_jB}{m_j}$, at a distance $\rho_j = \frac{m_j v\perp}{e_j B}$, which is the Larmor radius of orbit. A thermal charged particle, with a temperature $T_j$, has a Larmor radius of $\rho_{j} = \sqrt{2}\frac{m_j v_{T_j}}{|e_j| B}$, where the $\sqrt{2}$ is due to the particle having two degrees of freedom while it undergoes rotational motion. Thus, the general trajectory of a charged particle in a magnetic field is helical, as it travel with a velocity $v||$ along the magnetic field, and with  a rotational velocity $v_{\perp}$ around the magnetic field.\\
+In the relevant case of an ITER scale tokamak reactor with magnetic field strength of 13 Tesla, and a temperature of 10 keV, the ion and electron cyclotron frequencies and Larmor radii are given by
+\begin{align*}
+\rho_e \approx 7.7*10^{-4}mm\\
+\rho_p \approx  3.5*10^{-2}mm. 
+\end{align*}
+In a tokamak reactor, the helical magnetic field lines are used to confine the plasma ions and electrons in the reactor are not 100\% effective in containement. .\\
+\subsection{Particle Drifts \& Accerations }
+The above magnetic field was assume to be uniform, and there were no electric fields considered. We thus need to consider particle motion in the following cases:\\
+Gradients in the electric field perpendicular to the magnetic field.\\
+Gradients in the magnetic field, parallel to the direction of the magnetic field.\\
+An electric field perpendiculat to the magnetic field.\\
+A gradient in the magnetic field perpendicular to the magnetic field.\\
+Cu
+
+\subsection{Collisions}
+We now consider collisions between plasma particles.
+Collisions between charged plasma particles are responsible for diffusion and transport in the plasma, and fusion and $\alpha$ particle heating, in which the $\alpha$ particles impart the energy gained through fusion to the D-T fuel. 
+\section{Magnetic Confinement}
+
+\section{Traveling Waves \& Fluctuations}
+The majority of plasma transport, including so-called anomolous transport, is a result of long range electric fields that govern the collective behavior of plasma particles grouped in a Debye sph. These low frequency fluctuations create long wavelength electric fields with wave vector $k$, such that $1 <<\frac{\lambda_D}{k}$. These long wavelength modes determine the collective behavior of the  collection of charged particles within a Debye sphere.   \cite{Horton} We are interested in studying and characterizing transport levels and scaling driven by ion temperature gradient (ITG) drift-wave fluctuations. The mentioned long wavelength eletric field modes in the plasma allow the free energy in the ion temperature gradient to be accessed, converting thermal energy into kinetic energy \cite{Horton}, resulting in a majority of observed anomolous transport.
+\begin{align*}
+\frac{\partial f}{\partial t} + \textbf{v}\cdot \nabla f + \frac{q}{m}(\textbf{E} + \textbf{v}\times \textbf{B})\cdot \frac{\partial f}{\partial \textbf{v}}=0,
+\end{align*}
+\subsection{H-Mode Operation vs L-Mode Operation}
+
+In the 80s it was found that above certain power levels the plasma transitions from a low energy mode (L-Mode) to a high energy mode (H-Mode), and in this high energy mode the confinement time of the plasma is reached. However, instabilities in the plasma edge, or edge localized modes (ELM) can cause the the plasma to crash from the H-mode back down to the L-mode. These edge localized modes are caused by turbulence driven transport, induced by ion temperature gradients in the plasma.  flow must fully characterize all of the transport processes driving heat loss. A full characterization of the heat transport processes is beyond the scope of this master's report, but each of the transport mechanisms will be summarized here.
+
+
+%
+%Drift phenomenon.
+%Magnetic Confinement Principles.
+%Traveling waves in a plasma.
+%Kinetic Theory
+%Heating Model.
+\section{Heat transport - Classical, Neoclassical, and Turbulent Transport.} 
+%$\rho*$ scaling.
+
+
+\subsection{Parameter Scaling Experiments to Predict Transport }
+Predicting plasma behavior in fusion reactors is made possible through the use of dimensionless groups of parameters 
+
+\section{Plasma Models}
+Description of Models
+\subsection{Fluid Models}
+\subsection{Kinetic Models - Vlasov-? }
+To accurately predict ion temperature gradient driven turbulent transport in a fusion interparticle collisions must be taken into consideration  
+
+
+\section{Literature Review}
+$rho*$ parameter can be scaled to reflect larger plasma size than current reactors allow
+
+Predicting the scaling of turbulence driven heat transport in a fusion plasma at future tokamak sized reactors is critical to predicting performance, and to ensure that reactors the nececessary confinement properties for sustained fusion. Thus, scaling studies are of critical importance in fusion reactor design studies. As mentioned previously, the net heat transport must be balanced by auxiliary heating power, so understanding heat transport scaling is vital from an economic perspective. Additionally, stability of the plasma and controlling turbulence is critical to consistent tokamak performance, and edge model simulations may be employed in the future when simulating tokamak performance to ensure the reactor is within the desired operating regimes. \\
+
+Experimental transport research has focused on ion or electron transport scaling with the dimensionless parameter $\rho*$, as ions and electrons are the primary channels for heat transport out of the plasma. Experiments performed in current fusion reactors have indicated that in H-Mode operation that the scaling of ion driven transport is much larger than electron driven turbulent transport, making the ion channel the the primary channel studied in simulation studies. In H-Mode operation the ion transport scaled linearly (Bohm-like) with plasma size, while electron transport remained constant (gyroBohm-like) as plasma size was scaled. Thus, the focus of most simulation studies is on ion temperature gradient driven turbulent transport. \\
+
+The scaling of heat transport derived in current experimental reactors cannot necessarily be extrapolated to future operational reactors, as, in current reactors, the dimensionless plasma radius $\rho*$ cannot be scaled to future operational values. However, with the development of parallel computing, modern gyrokinetic theory, and advanced numerical simulations and algorithms, it has become possible to accurately simulate turbulence driven heat transport from first physical principles.
+
+Previous $\delta_f$ simulation studies involved fixing the ion temperature gradient, $R/L{ti}$ and scaling the plasma size via the dimensionless parameter $\rho*^{-1} = a/\rho_{ti}$, where $a$ is the radial length of the tokamak reactor, and $\rho_{ti}$ is the thermal ion Larmor radius, $R$ is major radius of the tokamak, and $L_{ti}$ is the ion temperature length scale, and then observing the normalized ion heat flux, $q_i/(\chi_{GB}n_iT_i/a)$, at a particular radial distance, $r = 0.5a$ with $q_i $ being the ion heat flux, $\chi_{GB}$ is the Bohm diffusion constant, $n_i= 10^{19}m^{-3}$, and $T_i$ is the ion temperature.c
+
+
+In a working fusion reactor, auxiliary heating methods will be used to balance the power lost from the plasma via heat transport. Depending on how transport scales with reactor size, different heating power scaling and strategies will need to be employed: in the case of Bohm like scaling of transport with reactor size, the auxiliary heating will need to increase linearly with reactor size, while gyro-Bohm scaling means that auxiliary be held constant. This difference is critical, as any additional input power affects the global confinement properties of the plasma, and increases heat transport. Additionally, the input power that will be generated by $\alpha$ particle heating in future tokamak reactors is significantly larger than current fusion experiments, and so predicting how $\alpha$ particle heating affects transport scaling is impossible with current experimental reactors.  Thus, to accurately model heat transport, it is necessary to incorporate a heating model that captures the input power $P_in$ from auxiliary heating and $\alpha$ particle heating.\\
+
+In Nakata and Idomura it was shown that, due to ion avalanche events in the plasma, the net ion heat flux "increased rapidly above the nonlinear critical gradient," yielding reduced confinement properties as heating power is scaled. This increase in ion heat flux indicates that maintaining the necessary temperature gradient for H-Mode operation becomes more difficult as auxiliary power increases, which is problematic since that is the operating mode that future reactors will work in. or that the input power degrades the confinement property $\tau_i$. In the same paper,the $\rho*$ scan demonstrated that the PDF for $q_i$ with $\rho* = 600$, and without a heating pows work done in transport scaling research by work performed in [NAKATA, IDOMURA, and other heating power scaling experiments] by incorporating the uncertainty that exists in the heat deposition methods into the heating modeer model, matched the $q_i$ at $(\rho* = 300, P_in = 8MW)$, which suggest that ion transport scaling in the simulated environment is predominantly driven by input power and not plasma size. These results demonstrate important of fully characterizing the role that input power, and input power scaling, play in ion driven heat transport and scaling in a fusion reactor. \textbf{Figures from Nakata Idomura 2014 here}\\
+
+It is critical that the electron and ion density and temperature profiles that are used in the plasma simulation are accurate, as the gradients of  these profiles drive the turbulent transport that we are studying. The simulation outputs are highly sensitive to these profiles, so accurate temperature and density profiles derived from fusion experiments are required for accurate predictions of heat transport from the plasma simulations. Any set of measurements and fitting yield profiles along with uncertainty profiles. Methods of measuring particle density and temperature include using Thompson scattering to take measurements of temperature and density at 33 radial positions in 16 ms time increments\cite{howard_quantitative_2012}.The density and temperature profiles and profile uncertainties of an Alcator C-Mod L-Mode discharge have been extracted using STRAHL simulation code and Monte Carlo sampling \cite{howard_quantitative_2012}. Recently, \cite{m.a._chilenski_et_al_improved_2015} developed software that could fit the different profiles, along with their uncertainties in a statistically rigorous manner using Gaussian process regression. Although these profiles have been used for model validation, outside of \cite{m.a._chilenski_et_al_improved_2015}, and \cite{Varis}, no significant work has been done on uncertainty propagation of the temperature and density profiles in a high fidelity plasma setting. Thus, we seek demonstrate the viability of such an experiment for uncertainty analysis reasons, and to determine the sensitivity in heat transport to the different profile parameters, such as shape and amplitude.
+
+\vspace{0.01cm}
+
+
+\vspace{0.01cm}
+
+To address these issues, and build on previous work, we plan to construct a sparse grid interpolant that will approximate the response of gyrokinetic transport model to the heating model parameter space. If succesful this experiment will accomplish the following: it will allow us to to determine the sensitivity of heat transport  to the parameters of the heating model, and determine an active set of parameters for future work; it will yield a 4-Dimensional response surface to be used for predictions and uncertainty propagation in a manner that is cheaper than direct numerical simulations; the response surface can be used to make predictions of heat transport scaling under a range of tokamak operating parameters.\\
+
+\section{Uncertainty Quantification}
+
+\subsection{Introduction}
+
+\subsection{Heating Sources}
+Per [Y. Idomura1, H. Urano2, N. Aiba2 and S. Tokuda2], "A source term requires and empirical modeling." This on-axis radial heating model with a fixed power input provides the energy for momentum and heat transport driven by ITG turbulence. [[Y. Idomura1, H. Urano2, N. Aiba2 and S. Tokuda2] The sink model fixes the temperature $T_i$ and parallel velocity $U_{||}$  at the pedestal boundary to reflect that of H-Mode boundary conditions.\\
+The equations of the model are given by
+\begin{align*}
+S_{src} &= \nu_h A_{src}(r)(f_{m1} - f_{m2})\\
+S_{snk} &= \nu_s A_{snk}(r)(f-f_0)\\	
+\end{align*}
+where $A_{src}(r)$ is the source deposition profile of radial on-axis heating, and $A_{snk}$ is the heat absorption deposition profile. The heating and cooling rates are given by $\nu_h$ and $\nu_s$, $f_{M1}, f_{M2}$ are two shifted Maxwellian distribution functions with different temperatures, and $f$ is the ion and electron dsitribution, and $f_0$ is the initial distribution. profile$f_{M1}$, $f_{M2}$, are chosen to impose fixed power input $P_in$ with no momentum or particle input.  The sink equation maintains the initial plasma boundary velocity and temperature using a Krook operator. Possible equations enforcing this condition?\\
+
+\vspace{0.01cm}
+
+\noindent
+\subsection{Defining the Quantity of Interest}
+We now consider forward propogation of the uncertainty associated with the physical parameters through the 5-D gyrokinetic ion model, and adiabatic electron model. As mentioned, this involves solving a system of partial differential equations that describe the ion and electron distribution functions in a 5-D phase space, which have conservation constrains enforced via various equations, and which are couple to Maxwell's systems of equations to propogate the charged particles through phase space. The solution of these system in the regime we are interested in, with ion and electron density on the order of $10^{19}m^{-3}$, takes NERSC parallel computers on the order of hours to days of computational time.\\
+
+
+\vspace{0.01cm}
+\noindent
+
+For the sake of clarity and compactness in writing, we simplify the full 5-D gyrokinetic simulation and heating model to be a black-box mapping, $f$, which maps the parameter space, $\mathbb{P}$, where $\mathbb{P} \subset \mathbb{R}^4$ are the inputs of the heating model, to a space containing our quantity of interest  (QOI), $Q\subset \mathbb{R}$, or
+(I need to refine the domain and co-domain definition for the paper.)
+\begin{align*}
+f:\mathbb{P} \to Q.
+\end{align*}
+
+
+We assume that our parameters are either normally distributed $\mathcal{N}(\mu, \sigma)$, or uniformly distributed $\mathcal{U}(0,1)$. and we are interested in predicting the expected value of the normalized net heat flux, $\hat{q}_i = q_i/(\chi_{GB}n_iT_i/a)$, as we vary over the entire parameter space, $\mathbb{P}^4$. Thus, we define the normalized heat flux to be a function of the parameter space, or $\hat{q}_i = \hat{q}_i(\textbf{p})$, where \textbf{p} $\in \mathbb{P}^4$, as well as a normalized heat flux distribution function $f(\hat{q}_i(\textbf{p}))$, defined over the entire parameter space. The expectation value is then
+\begin{align*}
+\mathbb{E}(\hat{q}_i(\textbf{p})) = \int_{\mathbb{P}^4}\hat{q}_i(\textbf{p}) f(\hat{q}_i(\textbf{p}))d\textbf{p}.
+\end{align*}
+
+\subsection{Methods for Determining $\mathbb{E}(\hat{q}_i(\textbf{p}))$}
+
+We consider two methods for determining the normalized heat flux expectation value. We can choose the operating power regime to work in, and use Monte Carlo integration to evaluate $\mathbb{E}(\hat{q}_i(\textbf{p}))$ directly. The Law of Large Numbers dictates that Monte Carlo integration error decreases at a rate of $\mathcal{O}(\frac{1}{\sqrt{N}})$. Monte Carlo integration is an attractive method in a high degree parameter space, as the convergence rate is independent of the dimension of the parameter space, and is a reliable workhorse for evaluating analytically intractable integrals. However in a parameter space of moderate dimensions, there are other methods that converge at a faster rate, or the error decreases at a rate $\mathcal{O}(N^{-\beta})$, where $\frac{1}{2} <\beta$.\\
+
+
+Considering this, we choose to instead approximate the PDF of the heat flux in response to the variation parameter space of the heating model using a polynomial interpolant surrogate model constructed on a sparse grid with Clenshaw-Curtis points. \\
+\subsubsection{Interpolation Basics}
+Polynomial interpolation employs various sets of polynomial basis functions, $\Psi_k$, like Lagrange, Hermite, or Legendre polynomials, to constructs a model $\hat{f}$ that  approximates the full mapping $f$ according to the interpolation error, and is much cheaper to evaluate than $f$, \cite{R_Smith} so 
+\begin{align*}
+\hat{f} = f + \epsilon
+\end{align*}
+
+
+The basic idea of interpolation is to use a basis of polynomials from a  space $\mathbb{P}_k$, of degree $\le k$ polynomials, and construct a polynomial that matches (interpolates) the map being approximated at select points on the unit domain. It is useful to mention that the theorem of interpolation states eactly 1 polynomial of degree $n-1$ interpolates $n$ points, thus the minimum degree of the polynomial necessary to interpolate the map informs the number of necessary interpolation points. Thus, if the function being interpolated is a polynomial of degree (n-1), then, with n-points, the interpolating polynomial exactly fits the original polynomial.\\
+
+\vspace{0.01cm}
+
+ To construct a polynomial interpolant in 1-D, we first convert the interval, $[a_k, b_k]$, that  parameter, $x_k$, is defined on to the unit interval $[0,1]$. We then choose points on the interval to interpolate the basis through. The selection of interpolation points can greatly effect the goodness of fit under certain situation. Consider the function $\frac{1}{(1+12x^2)}$ on evenly space points on $[-1,1]$. This function is 1 at the origin and smoothly converges to $\frac{1}{13}$ at the interval endpoints. However, the slope of the function around he origin causes the interpolating to overestimate the behavior at the endpoints of the interval, causing the interpolant to oscillate in an artificial manner. This problem is fixed by placing more collocation points towards the end of the interval, as this better informs the interpolant about the functions end behavior.\\
+
+\vspace{0.01cm}
+
+Another factor consider is nesting of interpolation points; consider a scenario in which we have certain set of data: $\{(x_{k,1},f(x_{k,1}), ..., (x_{k,n}, f(x_{k,n})\}$, and we construct an interpolating polynomial with this data. Then, consider that computational resources become available, so that we can evaluate our expensive model at another point $(x_{k,n+1}), f(x_{k,n+1})$. We want incorporate this new data point into the existing interpolant without changing any existing interpolating points, as this would exceed out computational budget. Thus, we want to use interpolating rules that allow us to add new points to an existing interepolant without reevaluating the existing interpolant, or create a nesting scheme or interpolant points.\\
+
+\vspace{0.01cm}
+\noindent
+
+The points that are both nested, and smooth out Runge behavior [RUNGE PHENOMENON PICTURE HERE] at the endpoints of the interpolant are the extrema of the Chebyshev polynomials, also known as Clenshaw-Curtis points:
+
+\begin{align*}
+x_{k_j} = \frac{1}{2}[1-\frac{-cos((j-1)\pi)}{M_l - 1}], \quad j = 1,..., M_l
+\end{align*}
+
+where $M_l$ is the number of interpolating points at the $l$th nested level. Thus, the 1-D interpolation rule  with the set  of interpolating points $x\{(x_{k,1},f(x_{k,1}), ..., (x_{k,n}, f(x_{k,M_l})\}$ is given by
+\begin{align*}
+\hat{f}^{M_l}(x) = \sum_{i=1}^{M_l}f(x_{k_i})\phi_{M_l,i}(x ).
+\end{align*}
+where $\phi_{M_l,i}, i = 1,..., M_l$ is the set of basis functions being used to interpolate the polynomial.\\
+Now, when considering interpolation for multidimensional parameter space, with parameters $x = \{x_1, x_2,..., x_n\}$ we can construct an interpolation rule by first constructing a 1-D interpolation formulas,$\mathcal{I}_k^{1}$ for each parameter. 
+The intervals are converted to the unit interval, so we are interpolating on the unit hypercube, $[0,1]^d$.The interpolant for each parameter may use a different nested level of points thus, we index the Clenshaw-Curtis interpolation points for each nested level:
+\begin{align*}
+x_l^m = \frac{1}{2}[1-cos\frac{\pi(m-1)}{M_l-1}], \quad m = 1,...,M_l 
+\end{align*}
+ with $M_1 = 1$ and $M_l$ = $2^{l-1} + 1$, $l>1$. \cite{R_Smith}
+For each interpolation rule, let $\Theta_l^{1} = \{x_l^1,...,x_l^{M_l}\}$. The new interpolation grid in the n-dimensional parameter space is determined by taking the tensor product of the 1-D rules, which yields the following set of $n$-tuple interpolation points:
+
+\begin{align*}
+\Theta_l^{(p)} = \cup_{\text{max} l' \le l} \Theta_{l_1}^{(1)} \times \cdots \times \Theta_{l_p}^{(1)},
+\end{align*} 
+
+where $l' = (l_1,...,l_n) \in \mathbb{N}^n$ is a multi-index with $|l'| = \sum_{i=1}^n l_i$, and  max $ l' \equiv$  max $ \{l_1,...,l_p\}$. This results in the number of interpolation points scaling exponentially with the dimension of parameter space, or
+
+\begin{align*}
+(\text{min} M_l)^n \le M \le (max M_l)^n.
+\end{align*}
+
+\noindent
+
+Additionally, the interpolant
+
+\begin{align*}
+\mathcal{I}^{(p)}u(q_1,...,q_p) = \sum_{i_1=1}^{M_{l_1}} \cdots \sum_{i_n =1}^{M_{l_n}} u(x_1^{i_1}, ..., x_n^{i_n}) L_{i_1}(x_1)\cdots L_{i_n}(x_n),
+\end{align*}
+must be evaluated at the $M_1*M_2*\cdots M_n$ grid points, which is computationally infeasible. This exponential growth of sampling points with respect to parameter space is referred to as the curse of dimensionality, and developing methods that retain fidelity of approximations to the full model, with fewer computations, is a current field of research in applied mathematics and phsyics. In our case we are dealing with a 4-D parameter space, and if we choose a level 3 rule with 5 grid points for each 1-D interpolant, then the 4-D grid has a total of $5^4 = 625$ 4-tuple grid points to evaluate, which corresponds to over a year of computation time to develop a model surrogate. \\
+
+As a basic example of the full tensor product sparse grid, consider a 2 dimensional parameter space, with the first dimension having a level 2 interpolating formula, and the second dimension having a level 3 interpolating formula. This yields the following sets of 1-D nodal points
+\begin{align*}
+\Theta_{l=2} &= \{0,\frac{1}{2},1\}\\
+\Theta_{l=3} &= \{0, \frac{1}{2}[1-\frac{\sqrt{2}}{2}], \frac{1}{2},\frac{1}{2}[1+\frac{\sqrt{2}}{2}], 1\},
+\end{align*}
+which demonstrates the nested property of the Clenshaw-Curtis points. Taking the tensor product of these points yields 15 points in the 2-D parameter space.\\
+If we use the Lagrange polynomials as the interpolating basis we have the following interpolating polynomials:
+\begin{align*}
+L_{l=2} &= 2(x-\frac{1}{2})(x-1)f(0) - 4x(x-1)f(\frac{1}{2}) + 2x(x-\frac{1}{2})f(1)\\
+L_{l=3} &= 16(x-\frac{1}{2}[1-\frac{\sqrt{2}}{2}])(x-\frac{1}{2})(x-\frac{1}{2}[1+\frac{\sqrt{2}}{2}])(x-1) + \cdots +16x(x-\frac{1}{2}[1-\frac{\sqrt{2}}{2}])(x-\frac{1}{2})(x-\frac{1}{2}[1+\frac{\sqrt{2}}{2}]).
+\end{align*}
+\noindent
+Without demonstration, we can see from the definition of the tensor product interpolating formula that the tensor product yields of these 1-D formulas yield a 6th degree polynomial.
+ 
+\vspace{0.01cm}
+
+This begs the question, why have we gone down the polynomial interpolation if it is computationally infeasible? The answer is routed in the idea that, by taking the tensor product of the interpolant rules, polynomials of degree $M_1*M_2*\cdots *M_n$ have been generated, which may be an unnecessarily high degree for accurately interoplating the "true" map. For instance, suppose the "true" map $f$ that we are trying to approximate is well approximated by a third degree polynomial in every direction in our parameter space $\mathbb{P}^4$. Constructing 1-D interpolation rules with 3rd degree polynomials, and taking the tensor products yields a highest order monomial term ($y_1^3y_2^3y_3^3y_4^3$)  of total degree  12. Since this term is unnecessary for accurate interpolation we can discard it, and the associated interpolation point.\\
+
+\vspace{0.01cm}
+
+In general if we can determine the interpolation level necessary for accurate model prediction we can set an upper bound on the monomial degree necessary for accurate interpolation, and discard unnecessary interpolation points from the full tensor product grid, producing a sparse grid. Thus, we seek a rigorous method that will allow us to construct a a set of weights and grid points, with significantly less grid points than a full tensor product grid construction, without sacrificing accuracy of the interpolant. Although other methods have been developed, Smolyak was the first to describe this method in \cite{Smolyak},  and is the method we use in this paper. For brevity, we will present the general sparse grid nodal points and interpolation rules, with associated definitions, as well as the inodal point set and interpolation rule for our 4-D space.\\
+
+\vspace{0.01cm}
+\noindent
+[INSERT IMAGES OF GRID COMPARISONS]
+Let $n$ be the dimension of the parameter space $\mathbb{P}^4$, and let  $x_k \in \mathbb{P}_k \subset \mathbb{P}^4$. Let $\{\phi_1,\cdots, \phi_m\}$ denote the set of polynomial basis functions being used to interpolate the function.We define the 1-D interpolant of the map $f$ as follows:
+\begin{align*}
+\mathcal{I}_l^{(1)}f = \sum_{i=1}^{M_n} f^i\phi_i(x_k)
+\end{align*}
+where the operator interpolates the $M_n$ points $\Theta_l^{(1)} = \{x_l^1, ..., x_l^{M_n} \}$ in the $l^{th}$ nested level, and the points $x_l^i$ are the Clenshaw-Curtis points \cite{R_Smith}. Per Smith, \cite{R_Smith} we use the following difference relations
+
+\begin{align*}
+\Delta_l^{(1)}u = (\mathcal{I}_l^{(1)} - \mathcal{I}_{l-1}^{(1)} )u \quad, \mathcal{I}_0^{(1)}u = 0. 
+\end{align*}
+which produces an interpolating formula with shifted weights. Using the difference formulas for each 1-D rule, we get the following sparse grid interpolation formula
+\begin{align*}
+\mathcal{I}_l^{(n)}u = \sum_{|l'| \le l+n-1} (\Delta_{l_1}^{(1)}\otimes\Delta_{l_2}^{(1)}\otimes\cdots\otimes\Delta_{l_n}^{(1)})u.
+\end{align*}
+The sparse grid nodal points are given by
+\begin{align*}
+\Theta_l^{(n)} = \cup_{|l'| \le l+n-1} \Theta_{l_1}^{(1)} \otimes \cdots \otimes \Delta_{l_n}^{(1)},
+\end{align*}
+where the $|l'|\le l+ n-1$ means $\sum_{i=1}^{n}l_i \le l+ n -1$.\\
+\vspace{0.01cm}
+In our scenario, with a 4th degree parameter space, and letting the level $l=3$,
+\begin{align*}
+l_1 + l_2 + l_3 + l_4 \le 6,
+\end{align*}
+the sparse grid interpolation formula and nodal set becomes
+
+\begin{align*}
+\mathcal{I}_l^{(4)}u = \sum_{l_1 + l_2 + l_3 + l_4 \le 6} (\Delta_{l_1}^{(1)}\otimes\Delta_{l_2}^{(1)}\otimes\Delta_{l_3}^{(1)}\otimes\Delta_{l_4}^{(1)})u.
+\end{align*}
+
+\begin{align*}
+\Theta_l^{(4)} = \cup_{l_1 + l_2 + l_3 + l_4 \le 6} \Theta_{l_1}^{(1)} \otimes  \Theta_{l_2}^{(1)}\otimes  \Theta_{l_3}^{(1)} \otimes \Delta_{l_4}^{(1)},
+\end{align*}
+which indeed constrains the degree $k$ ofthe  monomial terms of the interpolating polynomial to be less than $6$.
+
+\subsubsection{Sparse Grid Construction}
+The approximate map is constructed by interpolating $\hat{f}$ through points produced by $f:\mathbb{P}^4 \to \mathbb{R}$,  or for select points $\textbf{x} \in \mathbb{P}^4$: 
+$$\hat{f}(\textbf{x}) = f(\textbf{x}).$$
+
+So, we would like to use the least amount of interpolation points possible that still allows us to capture the interesting behavior in the full model. To do this we need to construct a 4 dimensional grid of points, $\Omega \subset \mathbb{P}^4$, to interpolate\\
+
+\vspace{0.01cm}
+
+%
+%
+%Constructing a polynomial interpolant involves choosing interpolation points based on the type of behavior that we are trying to capture in the true model
+%
+% In \cite{Cameron_Martin}, it was shown that, given  a sequence of random variables $\{Q_k(\omega)\}_{k=1}^{\infty}$ defined on a sample space $\Omega$, of the probability space $(\Omega, \mathcal{F},P)$. We also let $\mathbb{P}_k$ be the space of polynomials with arguments $Q_i$, and having a degree less than or equal to $k$, and letting $\hat{\mathbb{P}}_k)$ be the space of polynomials that are orthogonal to $\mathbb{P}_{k-1}$. In the probability space, a random variable $u(\omega)$ with finite variance, can be expanded in the following infinite series:
+%\begin{align*}
+%u(\omega) = u_0\hat{P}_0 + \sum_{i_1=1}^{\infty}u_{i_1}\hat{P}(Q_{i_1}) + \sum_{i_1=1}^{\infty}\sum_{i_2 =1}^{\infty}u_{i_1,i_2}\hat{P}_2(Q_{i_1,i_2} + \cdots.
+%\end{align*}
+%We use a truncated version of this expansion to approximate the
+%
+%In a probabilistic setting, interpolation is reffered to as spectral collocation, where the collocation points are the points being interpolated in the parameter space.\\\
+
+
+\section{UQ Model Problem - Landau Damping}
+\subsection{Physical Background - Landau Damping}
+To motivate the uncertainty quantification problem we are solving in a high fidelity setting, and to demonstrate the methods for sparse grid inerpolant model surrogates to perform uncertainty quantification with, we introduce a toy model, Landau damping. Lev Landau is responsible for properly deriving the dispersion relation for electron plasma oscillations by using contour integration to solve the Vlasov equation in the complex field \cite{Chen}. What was discovered is that, given a traveling electric field fluctuation in a plasma, electrons traveling with a velocity \textbf{v} close to the phase velocity, \textbf{v}$_{\phi}$, of the electric field can exchange energy with the field. An electron with \textbf{v}  $\approx$ \textbf{ v}$_{\phi}$, moves opposite the field, in the field reference frame, and can interact with the field. An electron moving slower than the field will be accelerated when it reaches the peak of the wave in the direction that the wave is traveling, increasing kinetic energy of the electron and reducing the energy of the field. Electrons traveling faster than the phase velocity impart energy to the wave, decreasing their kinetic energy. Assuming the electron velocities have a Maxwell distribution, there are more slow electrons than there are fast electrons, thus there is an overall damping of the field.\\
+
+\vspace{0.01cm}
+
+There are two types of Landau damping to consider: linear and nonlinear Landau damping. If the field potential, $\phi$, is small then the electric field amplitude does not effect the kinetic energy of the electron, and the field and velocity equations can be linearized. If $\phi$is larger than the kinetic energy of the electron, then the electrons can become trapped in the potential of the electric field. When trapped, electrons completely change directions relative to the wave when reflected off of the potential, thus the velocities of the electron are greatly affected by the oscillating field, and the distribution function $f(v)$ is greatly disturbed, no longer allowing for linearization of our system of equations. \\
+
+\vspace{0.01cm}
+
+In our simulation and UQ example we consider both the linear and nonlinear Landau damping examples\\ 
+
+\vspace{0.01cm}
+\subsection{Vlasov-Boltzmann Description}
+To setup the problem, we consider the most general domain of a 6-D phase space $\Omega = \Omega_x\times \Omega_v = [0,L]\times[0,L]\times[0,L]\times \mathbb{R}^3$. To properly treat Landau damping, kinetic theory is employed to model how the electrons in the distribution close to the electric field phase velocity interact with electric field, as the Maxwellian distribution of particles is greatly disturbed in this region of velocity space.  The Vlasov-Boltzmann equation is the standard equation used to model the electric field fluctuations:
+
+\begin{align*}
+\frac{\partial f}{\partial t} + \textbf{v}\cdot \nabla f + \frac{q}{m}(\textbf{E} + \textbf{v}\times \textbf{B})\cdot \frac{\partial f}{\partial \textbf{v}}=0,
+\end{align*}
+along with divergence free magnetic field $\nabla \cdot$\textbf{B}$= 0$.\\
+Since the ions are massive in size relative to the electrons it is assumed that they do not react to fluctuations in the electric field, so we treat the ion density and related quantities as fixed, which yields $\rho_{ion} = 1$.\\
+\vspace{0.01cm}
+Coupling the Vlasov-Boltzmann system to Poisson's equation allows us to solve for quantities of interest such as the potential, charge density, current, and electric field by evaluating the first moment of the electron distribution function: 
+\begin{align*}
+\rho_{e} &= -\int f d^3v\\
+-\nabla^2 \Phi &= \rho_{ion} + \rho_{e}\\
+E&:= - \nabla \Phi.
+\end{align*}
+The kinetic energy of the electrons is calculated by taking the second moment of distribution function, and the electric field energy is calculated with the classical energy equation $\mathcal{H}_E(t) = \frac{1}{2}\int_{\Omega_x} |E|^2 d^3x$, yielding a total time dependent  Hamiltonian
+\begin{align*}
+\mathcal{H}(t) = \frac{1}{2}\int_{\Omega} f v^2 dx^3dv^3 +  \frac{1}{2}\int_{\Omega_x} |E|^2 d^3x.
+\end{align*}
+The Vlasoz-Boltzmann equation is a homogeneous Cauchy equation, and therefore a conservative system, derived by taking the total time derivative of the distribution function $f(\textbf{X}(t),\textbf{V}(t),t)$
+\begin{align*}
+\frac{D f}{Dt} = \frac{\partial f}{\partial t} + \frac{d \textbf{X}}{dt}\frac{\partial f}{\partial \textbf{X}} + \frac{d\textbf{V}}{d t} \frac{\partial f}{\partial \textbf{V}} =0,
+\end{align*}
+which means that volumetric elements of the distribution stay contant along trajectories in phase space, or
+\begin{align*}
+f(X(t), V(t), t) =  f(X(0), V(0), 0) \qquad \forall t\ge 0.
+\end{align*}
+The Poisson equation along with the method of characteristics is used to solve this system, with the characteristics evolving according to the following equations of motion \cite{Ameres}
+\begin{align*}
+\frac{d X(t)}{dt} &= V(t)\\
+\frac{d V(t)}{dt} & = -(E(t,X(t)) + V(t)\times B(X(t),t)).
+\end{align*}
+\vspace{0.01cm}
+\noindent
+We now consider a 1-D electric field oscillation example that demonstrates Landau damping, with an additional small constant background electric field. We consider a uniform plasma with background distribution $f_{0}($\textbf{v}) is assumed, and \textbf{B}$_0=B_0$(\textbf{r}) \textbf{E}$_0= E_0$(\textbf{r},t), with  \textbf{B}$_0$ and \textbf{E}$_0$ being the background fields. 
+is introduced in the plasma, causing electron oscillations. This yields the perturbed distribution function $f($\textbf{x,v},t), with a distribution perturbation $f_1($\textbf{x,v},t), 
+
+\begin{align*}
+f(\textbf{r,v},t) = f_0(\textbf{v}) + f_1(\textbf{r,v},t).
+\end{align*}
+
+\noindent
+If we assume a traveling electric field perturbation, \textbf{E}$_1$, then the total electric field is given by
+\begin{align*}
+\textbf{E}(\textbf{r},t) = \textbf{E}_0(\textbf{r},t) + \textbf{E}_{1}(\textbf{r},t).
+\end{align*}
+Now we reduce this system of equations by assuming a 1-D perturbation in the $x$-coordinate. This simplifcation still allows us to capture the essential physics under consideration.\\
+
+The distribution function reduces to
+\begin{align*}
+f(x, v_x,t) = f_0(x,v_x,t) + f_1(x,v_x,t)
+\end{align*}s
+Assume an electric field only in the $x$-direction, so \textbf{E}$_0$ = $E_{0,x}(x,t)$, and assume the following form of the perturbed electric field
+
+\begin{align*}
+\textbf{E$_1$} = E_1e^{i(kx-\omega t)},
+\end{align*}
+then total electric field is given by 
+\begin{align*}
+E_x(t) = E_{0,x}(x,t) + E_1e^{i(kx-\omega t)}.
+\end{align*}
+Since the electric field is 1-D,
+
+ $$f_1 \propto e^{(i(kx - \omega t)}.$$
+
+We also assume that, since the ions are massive, and essentially not moving on the timescales of interest, that we can ignore their behavior. This means we can solve a single Vlasov-Boltzmann equation for the plasma electrons. This model can be reduced even further by removing the background electric field, and will still retain the Landau damping behavior.\\
+Substituting $E_x(x,t)$, , and $f(x,v_x,t)$ into the Vlasov-Boltzmann equation we arrive at the:
+\begin{align*}
+\frac{\partial(f_0(\textbf{v}) + f_1(x,,v_x,t))}{\partial t} +  v_{x}\frac{\partial( f_0(\textbf{v}) + f_(x,v_x,t))}{\partial x} + (E_{0,x} + E_1e^{(i(k_x x-\omega t)})\frac{\partial(f_0(\textbf{v}) + f_1(x,v_x,t))}{\partial v_x}=0,
+\end{align*}
+which reduces to
+\begin{align*}
+-i\omega f_1 +  v_{x}ik_xf_1 + (E_{0,x} + E_{1,x}e^{(i(k_x x-\omega t)})\frac{\partial( f_0 + f_1)}{\partial v_x} =0,
+\end{align*}
+when considering the time and spatial independence of $f_0$.\\
+In our model we consider $E_{0,x}$ to be a constant background electric field that, over time, alters the distribution function $f(v)$.\\
+Finally, Poisson's equation yields
+\begin{align*}
+\epsilon_{0} \nabla \cdot \textbf{E}_1 &= ik \epsilon_0E_x\\
+& = -en_1\\
+& = -e \int \int \int f_1 d^3 v,
+\end{align*}
+which closes our system of equations.
+In the linear regime of Landau damping the term $E_{1,x}e^{(i(k_x x-\omega t)}\frac{\partial(  f_1)}{\partial v_x}=0$, as this is a second order perturbation. However, when considering electron trapping in the electric field, the distribution $f(v)$ is greatly disturbed around the velocity $v=\omega/k_x$, so the second order perturbation quantity cannot be ignored[cite chen].\\
+\subsection{Simulation Methodology and Outline}
+For work on his PhD \cite{Ameres}  developed a spectral 2-D Vlasov-Poisson solver that simulates  a symplectic Runge-Kutta method was used to solve the above system in Matlab. Symplectic methods are used as they are a conservative numerical integration method, which is necessary since we are dealing with a conservative Hamiltonian system. The simulation offers the option to turn on a background electric field as a function of space and time, and to vary the perturbation level of the electron distribution functions.\\
+
+\section{Full Experiment}
+
+\subsection{XGC Simulation}
+A radial ion gradient is established that has been shown to produce nonlinear transport behavior in the plasma. The gyrokinetic equations are simulated along the helical field lines, and the particle number and velocities are sampled at 19 different poloidal planes at each time step. Statistics and quantities of interest can then be determined using the phase space distribution functions. 
+
+
+
+ 
+\section{Results}
+
+
+\section{Discussion}
+
+
+\section{Conclusions}
+\medskip
+\bibliographystyle{unsrt}
+\bibliography{My_Library}
+\end{document}
